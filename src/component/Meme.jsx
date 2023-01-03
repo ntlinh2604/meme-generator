@@ -1,4 +1,8 @@
 import React from "react";
+import html2canvas from "html2canvas";
+import downloadjs from "downloadjs";
+
+
 
 const Meme = () => {
     const [memeImage, setMemeImage] = React.useState("http://i.imgflip.com/1bij.jpg")
@@ -35,6 +39,29 @@ const Meme = () => {
         })
     }
     
+    async function handleSaveImg(){
+        
+        const memeContainer = document.querySelector('.meme--container');
+        
+        const canvas = await html2canvas(memeContainer,{
+            allowTaint : true,
+            useCORS:true
+        });//allow to save external images
+        const dataURL = canvas.toDataURL();
+        downloadjs(dataURL, 'download.png', 'image/png');
+
+        //c2
+        // const link = document.createElement("a");
+        // link.download = `${Date.now()}.jpg`;
+        // link.href = await  html2canvas(memeContainer, {
+        //     allowTaint:true,
+        //     useCORS:true
+        // }).then(canvas => canvas.toDataURL());
+        // link.click();
+
+   
+    }
+
     
     
 
@@ -67,6 +94,14 @@ const Meme = () => {
                 <img className="meme--image" src={memeImage} alt=""></img>
                 <div className="meme--text top" >{memeText.topText}</div>
                 <div className="meme--text bottom">{memeText.bottomText}</div>
+
+            </div>
+            <div className="save--container">
+                <button 
+                onClick={handleSaveImg}
+                className="save--image"
+                >
+                    Save your meme</button>
             </div>
             
             
